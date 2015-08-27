@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Inicio - Administrador
+{% endblock %}
+
+{% block poshead %}
+	{% if bienvenida %}
+	<style type="text/css">
+		.sidebar-image { opacity: 0; }
+		.main-banner { display: none; }
+	</style>
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			$('.main-banner').delay(300).slideDown(function() {
+				$('.sidebar-image').animate({ opacity: 1 }, 1100);
+			});
+		});
+	</script>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="large-4 medium-6 small-12 columns">
+		<div class="division-banner" style="background-image: url()"></div>
+		 	<div class="large-12 colums panel">
+	            <h3 class="text-center">Usuarios del sistema<h3>
+	            <div class="row">
+	                <div class="large-12 columns">
+	                    <button class="button expand" onclick="location.href='/activar_usuarios'">Administrar Alumnos </button>
+	                </div>
+	                <div class="large-12 columns">
+	                    <button class="button expand" onclick="location.href='#'">Administrar Maestros y secretarias </button>
+	                </div>
+	                <div class="large-12 columns">
+	                    <button class="button expand" onclick="location.href='#'">(+) Nueva Secretaria</button>
+	                </div>
+	                <div class="large-12 columns">
+	                    <button class="button expand" onclick="location.href='#'">(+) Nuevo Maestro </button>
+	                </div>
+                </div>
+	        </div>
+	</div>
+
+	<div class="large-4 medium-6 small-12 columns">
+		<div class="division-banner" style="background-image: url()"></div>
+		 	<div class="large-12 colums panel">
+	            <h3 class="text-center">Cursos<h3>
+	            <div class="row">
+	                <div class="large-12 columns">
+	                    <button class="button expand" onclick="location.href='#'">Agregar Curso </button>
+	                </div>
+	                <div class="large-12 columns">
+	                    <button class="button expand" onclick="location.href='#'">Administrar Cursos </button>
+	                </div>
+                </div>
+	        </div>
+	</div>
+</div>
+{% endblock %}
