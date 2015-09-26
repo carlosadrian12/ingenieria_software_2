@@ -27,3 +27,18 @@ class Usuario(models.Model):
         usuario = cls(user=nuevo_user, codigo=codigo, rol=Rol.objects.get(id=1))
         return usuario
         
+    @classmethod
+    def alta_secretaria(cls, username, password, first_name, last_name, email, codigo):
+        nuevo_user = User.objects.create_user(username=username, password=password,
+                                     first_name=first_name, last_name=last_name, email=email)
+        nuevo_user.save()
+        usuario = cls(user=nuevo_user, codigo=codigo, rol=Rol.objects.get(id=2))
+        return usuario
+
+    @classmethod
+    def alta_maestro(cls, username, password, first_name, last_name, email, codigo):
+        nuevo_user = User.objects.create_user(username=username, password=password,
+                                     first_name=first_name, last_name=last_name, email=email)
+        nuevo_user.save()
+        usuario = cls(user=nuevo_user, codigo=codigo, rol=Rol.objects.get(id=4))
+        return usuario

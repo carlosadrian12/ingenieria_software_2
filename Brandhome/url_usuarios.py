@@ -13,4 +13,7 @@ url_usuarios = [
     url(r'^modificar-password/$',modificar_password), 
     url(r'^registro-alumno/nuevo/$', nuevo_alumno),
     url(r'^activar_usuarios',activar_usuarios),
+    url(r'^nuevo/secrearia', nueva_secretaria),
+    url(r'^inicio-administrador/nuevo/maestro', nuevo_maestro),
+    url(r'^activar-maestros', activar_maestros),
 ]

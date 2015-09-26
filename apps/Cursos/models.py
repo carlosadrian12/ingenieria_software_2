@@ -14,6 +14,7 @@ class Curso(models.Model):
     nick = models.CharField(max_length=20, validators=[alfanumerico], unique=True)
     nombre = models.CharField(max_length=30)
     Seccion = models.CharField(max_length=120)
+    maestro = models.OneToOneField(Usuario, blank=True, null=True)
 
     def __unicode__(self):
         return self.nombre

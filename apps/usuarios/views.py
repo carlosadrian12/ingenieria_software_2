@@ -188,7 +188,7 @@ def panelInicio(request):
     else:
         return redirect('/')
 
-def nuevo_alumno(request):
+'''def nuevo_alumno(request):
     form_size = 'small'
     if request.method == 'POST':
         usuario = request.POST.get('username','')
@@ -229,13 +229,34 @@ def nuevo_alumno(request):
                                 
                 return panelInicio(request)
     else:
+        return render(request, 'Usuarios/nuevo-alumno.html', locals())'''
+def nuevo_alumno(request):
+    form_size = 'small'
+    if request.method == 'POST':
+        usuario = request.POST.get('username','')
+        password = request.POST.get('password', '')
+        codigo = request.POST.get('codigo','')
+        nombre = request.POST.get('nombre','')
+        apellido = request.POST.get('apellido','')
+        correo = request.POST.get('correo', '')
+
+        if User.objects.filter(Q(username=usuario) | Q(email=correo)).exists():
+            errors = 'Ya existe registro con ese nombre'
+            return render(request, 'Usuarios/nuevo-alumno.html', locals())
+        else:
+            nuevo_usuario = Usuario.alta_alumno(usuario, password, nombre, 
+                                                apellido, correo, codigo)
+            nuevo_usuario.save()
+            #Autentificar que el usuario exista
+            return redirect('/inicio-administrador/')
+    else:
         return render(request, 'Usuarios/nuevo-alumno.html', locals())
 
 @login_required(login_url='/')
 def activar_usuarios(request):
     if request.session['rol'] == 3:
         if request.method == 'POST':
-            usuarios = Usuario.objects.exclude(user__username = 'admin').order_by('user__username')
+            usuarios = Usuario.objects.filter(rol__id=1).order_by('user__username')
 
             for x in usuarios:
                 estado = request.POST.get(x.user.username,'')
@@ -249,7 +270,81 @@ def activar_usuarios(request):
 
             return redirect('/inicio-administrador/')
         else:
-            usuarios = Usuario.objects.exclude(user__username = 'admin').order_by('user__username')
+            usuarios = Usuario.objects.filter(rol__id=1).order_by('user__username')
             return render(request, 'Usuarios/activar-usuarios.html', locals())
+    else:
+        return redirect('error403', origen=request.path)
+
+def activar_maestros(request):
+    if request.session['rol'] == 3:
+        if request.method == 'POST':
+            usuarios = Usuario.objects.exclude(rol__id = 1 ).order_by('user__username')
+
+            for x in usuarios:
+                estado = request.POST.get(x.user.username,'')
+
+                if estado=='active' and not x.user.is_active:
+                    x.user.is_active = True
+                    x.user.save()
+                elif estado=='unactive' and x.user.is_active:
+                    x.user.is_active = False
+                    x.user.save()
+
+            return redirect('/inicio-administrador/')
+        else:
+            usuarios = Usuario.objects.exclude(rol__id = 1).order_by('user__username')
+            return render(request, 'Usuarios/activar-maestros.html', locals())
+    else:
+        return redirect('error403', origen=request.path)
+
+@login_required(login_url='/')
+def nueva_secretaria(request):
+    if request.session['rol'] == 3:
+        form_size = 'small'
+        if request.method == 'POST':
+            usuario = request.POST.get('username','')
+            password = request.POST.get('password', '')
+            codigo = request.POST.get('codigo','')
+            nombre = request.POST.get('nombre','')
+            apellido = request.POST.get('apellido','')
+            correo = request.POST.get('correo', '')
+
+            if User.objects.filter(Q(username=usuario) | Q(email=correo)).exists():
+                errors = 'Ya existe registro con ese nombre'
+                return render(request, 'Usuarios/nueva-secretaria.html', locals())
+            else:
+                nuevo_usuario = Usuario.alta_secretaria(usuario, password, nombre, 
+                                                    apellido, correo, codigo)
+                nuevo_usuario.save()
+                #Autentificar que el usuario exista
+                return redirect('/inicio-administrador/')
+        else:
+            return render(request, 'Usuarios/nueva-secretaria.html', locals())
+    else:
+        return redirect('error403', origen=request.path)
+
+@login_required(login_url='/')
+def nuevo_maestro(request):
+    if request.session['rol'] == 3:
+        form_size = 'small'
+        if request.method == 'POST':
+            usuario = request.POST.get('username','')
+            password = request.POST.get('password', '')
+            codigo = request.POST.get('codigo','')
+            nombre = request.POST.get('nombre','')
+            apellido = request.POST.get('apellido','')
+            correo = request.POST.get('correo', '')
+
+            if User.objects.filter(Q(username=usuario) | Q(email=correo)).exists():
+                errors = 'Ya existe registro con ese nombre'
+                return render(request, 'Usuarios/nuevo-maestro.html', locals())
+            else:
+                nuevo_usuario = Usuario.alta_maestro(usuario, password, nombre, 
+                                                    apellido, correo, codigo)
+                nuevo_usuario.save()
+                #Autentificar que el usuario exista
+                return redirect('/inicio-administrador/')
+        else:
+            return render(request, 'Usuarios/nuevo-maestro.html', locals())
     else:
         return redirect('error403', origen=request.path)
