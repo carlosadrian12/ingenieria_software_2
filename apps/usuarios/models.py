@@ -42,3 +42,13 @@ class Usuario(models.Model):
         nuevo_user.save()
         usuario = cls(user=nuevo_user, codigo=codigo, rol=Rol.objects.get(id=4))
         return usuario
+
+class Pagos(models.Model):
+    user = models.OneToOneField(User, primary_key=True)
+    pago = models.IntegerField()
+    tipo = models.CharField(max_length=15)
+    fecha_limite = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.user.username
+        pass

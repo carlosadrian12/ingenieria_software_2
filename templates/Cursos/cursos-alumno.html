@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Control - Maestros
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="medium-12 columns ">	
+		<table class="full-width-table">
+			<caption><h3>Usuarios<h3></caption>
+
+			<thead>
+                <th>NOMBRE</th>
+                <th>DIA</th>
+                <th>HORARIO</th>
+                <th>MAESTRO</th>
+            </thead>
+
+			<tbody>
+                <form method='POST' action='/activar_maestros'>{% csrf_token %}
+                {% for x in cursos %}
+                <tr>
+                    <td class="row-username">{{ x.fk_curso.nombre }}</td>
+                    <td class="row-nombre">{{ x.fk_curso.dias }}</td>
+                    <td class="row-apellido">{{ x.fk_curso.hora }}</td>
+                    <td class="row-rol">{{ x.fk_curso.maestro }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan=5><input type="submit" value="Aplicar cambios" class="small button radius right"/></td>
+                </tr>
+                </form>
+            </tbody>
+        </table>
+	</div>
+
+</div>
+{% endblock %}

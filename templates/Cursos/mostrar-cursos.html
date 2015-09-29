@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Inicio - Administrador
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="medium-12 columns ">	
+		<table class="full-width-table">
+			<caption><h3>CURSOS<h3></caption>
+
+			<thead>
+                <th>CURSO</th>
+                <th>CODIGO</th>
+                <th>MAESTRO</th>
+                <th>DIA</th>
+            </thead>
+
+			<tbody>
+                <form method='POST' >{% csrf_token %}
+                {% for x in cursos %}
+                <tr>
+                    <td class="row-Curso">{{ x.nombre }}</td>
+                    <td class="row-Codigo">{{ x.nick }}</td>
+                    <td class="row-Nombre">{{ x.maestro.user.last_name }}</td>
+                   
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan=5><input type="submit" value="Aplicar cambios" class="small button radius right"/></td>
+                </tr>
+                </form>
+            </tbody>
+        </table>
+	</div>
+
+</div>
+{% endblock %}

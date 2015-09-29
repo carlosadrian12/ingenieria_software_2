@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Seleccionar- Cursos
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="medium-8 medium-centered columns panel " >
+    {% if datos %}
+        <label>{{datos}}</label>
+    {%endif%}
+        <h4 class="text-center">Curso {{materia.nombre}}</h4>
+            <form method='POST' >{% csrf_token %}
+                <input type="text" name="materia" value ="{{materia.nombre}}" data-tooltip aria-haspopup="true"  >
+                <input type="submit" class="button expand"> 
+            </form> 
+    }
+    </div>
+</div>
+{% endblock %}

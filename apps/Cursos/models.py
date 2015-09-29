@@ -20,12 +20,12 @@ class Curso(models.Model):
         return self.nombre
         pass
 
-class Horario(models.Model):
-	inicio = models.CharField(max_length=40)
-	dias = models.CharField(max_length=30)
-	hora = models.CharField(max_length=20)
-	curso = models.ForeignKey(Curso)
-
-	def  __unicode__(self):
-		return self.inicio
-		pass
+class Listas(models.Model):
+    fk_curso = models.ForeignKey(Curso,blank=True, null=True)
+    fk_alumno = models.ForeignKey(Usuario, blank=True, null=True)
+    codigo = models.CharField(max_length=20 ,primary_key=True)
+    
+    def __unicode__(self):
+        return str(self.codigo)
+        pass
+    

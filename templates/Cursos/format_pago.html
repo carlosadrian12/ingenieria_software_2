@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Cambiar - Administrador
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="medium-12 columns ">    
+        <table class="full-width-table">
+            <caption><h3>Usuario<h3></caption>
+
+            <thead>
+                <th align="center">ESTADO DE CUENTA DEL ESTUDIANTE</th>
+            </thead>
+            <thead>
+                <th>USUARIO</th>
+                <th>NOMBRE</th>
+                <th>APELLIDO</th>
+            </thead>
+
+            <tbody>
+                <form method='POST' >{% csrf_token %}
+                <tr>
+                    <td class="row-username"  >{{ perfil.user.username }}</td>
+                    <td class="row-nombre"  >{{ perfil.user.first_name }} </td>
+                    <td class="row-apellido"  >{{ perfil.user.last_name }} </td>
+                </tr>
+                
+                <thead>
+                    <th>DEUDA</th>
+                    <th>FECHA DE VENCIMIENTO</th>
+                </thead>
+                {% for x in deuda%}
+                    <tr>
+                        <td class="row-deuda"  >{{ x.pago }}</td>
+                        <td class="row-fechafin"  >{{ x.fecha_limite }} </td>
+                    </tr>
+                {% endfor%}
+                
+                <tr>
+                    <td colspan=5><input type="submit" value="Imprimir formato" class="small button radius right"/></td>
+                </tr>
+                </form>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+</div>
+{% endblock %}

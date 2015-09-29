@@ -1,0 +1,49 @@
+{% extends 'Forms/base.html' %}
+
+{% block title %}
+    Nuevo Curso - Administrador
+{% endblock %}
+
+{% block formulario %}
+	{% if not opcionesmaestro %}
+		<div class="alert-box warning radius">No hay maestros disponibles para asignar.<br/>
+			<a href="/nuevo_jefe/" style="color: #FFF190;">Por favor, cree uno primero.</a>
+		</div>
+	{% endif %}
+
+	<div class="row">
+		<div class="medium-12 columns">
+			<h4>Nuevo Curso</h4>
+			<form method='POST' >{% csrf_token %}
+				<label>Nombre del Curso</label>
+					<input type="text" name='nombre' placeholder="Nombre del curso" data-tooltip aria-haspopup="true" title="Nombre completo del Curso" required/>
+
+	       		<label>Codigo del curso</label>
+	       			<input type="text" pattern="[a-zA-Z0-9]{3,20}" maxlength="20" name="nick" placeholder="(max 9 caracteres)" data-tooltip aria-haspopup="true" title="sola numeros" required/>
+
+	       		<label>Seccion</label>
+					<input type="text" name='seccion' placeholder="seccion" data-tooltip aria-haspopup="true" required/>
+				<label>Inicio del Curso</label>
+					<input type="text" name='inicio' placeholder="seccion" data-tooltip aria-haspopup="true" required/>
+
+				<label>Dia del curso</label>
+					<input type="text" name='dia' placeholder="Dia" data-tooltip aria-haspopup="true" required/>
+
+				<label>Horario del curso</label>
+					<input type="text" name='horario' placeholder="Horario" data-tooltip aria-haspopup="true" required/>
+				
+				<label>Costo total del curso</label>
+					<input type="text" name='precio' placeholder="precio" data-tooltip aria-haspopup="true" required/>
+
+	       		<label>Asignar maestro</label>
+		       		<select name="maestros" >
+                        {% for x in opcionesmaestro %}
+                        <option value="{{x}}">{{ x.user.first_name }},{{ x.user.last_name }}, {{x.rol}}, ({{x.codigo}})</option>
+                        {% endfor %}
+                    </select>
+                    
+	       		<button class="button expand" >Continuar</button>
+	       	</form>
+		</div>
+	</div>	
+{% endblock %}

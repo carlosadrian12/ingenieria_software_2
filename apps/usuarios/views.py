@@ -7,10 +7,11 @@ from django.contrib.auth.models import User
 
 from django.db.models import Q
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 
-from apps.usuarios.models import Usuario, Rol
+from apps.usuarios.models import Usuario, Rol, Pagos
+from apps.Cursos.models import Curso, Listas
 # Create your views here.
 # las plantillas que se llamen mas de una vez es mejor ponerlas como constantes
 TEMPLATE_MODIFICA_PASS = 'Usuarios/modificar-password.html'
@@ -35,17 +36,17 @@ def inicio_admin(request):
 
 def inicio_alumno(request):
     #revisa que el usuario tenga permisos necesarios para ver el contenido de esta página
-    #if request.session['rol'] == 1:
-    banner = True
-    bienvenida = False
+    if request.session['rol'] == 1:
+        banner = True
+        bienvenida = False
 
-    if request.session['just_logged']:
-        bienvenida = True
-        request.session['just_logged'] = False
-        
-    return render(request, 'inicio-alumno.html', locals())
-    #else:
-     #   return redirect('error403', origen=request.path)
+        if request.session['just_logged']:
+            bienvenida = True
+            request.session['just_logged'] = False
+    
+        return render(request, 'inicio-alumno.html', locals())
+    else:
+        return redirect('error403', origen=request.path)
 
 @login_required(login_url='/')
 def modificar_perfil(request):
@@ -180,8 +181,8 @@ def logout(request):
 def panelInicio(request):
     if request.user.is_authenticated():
         if request.session['rol'] == 1:
-            return redirect('/inicio/')
-        elif request.session['rol'] == 2:
+            return redirect('/inicio-alumno/')
+        elif request.session['rol'] == 3:
             return redirect('/inicio-administrador/')
         else:
             return redirect('/inicio-administrador/')
@@ -252,6 +253,21 @@ def nuevo_alumno(request):
     else:
         return render(request, 'Usuarios/nuevo-alumno.html', locals())
 
+def formato_pago(request):
+    form_size = 'small'
+    user_modificar = request.session['usuario']['nick']
+    perfil = Usuario.objects.get(user__username = user_modificar)
+    deuda = Pagos.objects.filter(user__username = user_modificar)
+    print deuda
+    return render(request, 'Cursos/format_pago.html', locals())
+
+def seleccionar_cursos(request):
+    cursos = Curso.objects.all()
+    if request.method == 'POST':
+        return redirect("/inicio-alumno/")
+    else:
+        return render(request,'Cursos/seleccionar_cursos.html', locals())
+
 @login_required(login_url='/')
 def activar_usuarios(request):
     if request.session['rol'] == 3:
@@ -268,7 +284,7 @@ def activar_usuarios(request):
                     x.user.is_active = False
                     x.user.save()
 
-            return redirect('/inicio-administrador/')
+            return redirect('/inicio-administrador/',locals())
         else:
             usuarios = Usuario.objects.filter(rol__id=1).order_by('user__username')
             return render(request, 'Usuarios/activar-usuarios.html', locals())
@@ -348,3 +364,23 @@ def nuevo_maestro(request):
             return render(request, 'Usuarios/nuevo-maestro.html', locals())
     else:
         return redirect('error403', origen=request.path)
+
+def lista_cursos(request):
+    cursos = Curso.objects.all()
+    if request.GET.get('materia'):
+        materia = get_object_or_404(Curso, nombre=request.GET.get('materia'))
+        if request.method == 'POST':
+            try:
+                selec = request.POST.get('materia','')
+                curso = Curso.objects.get(nombre=selec)
+                alumno = Usuario.objects.get(user__username=request.user.username)
+                guardar = Listas(fk_alumno = alumno, fk_curso = curso)
+
+                guardar.save()
+                datos = " Curso a~adido "
+                return render(request,'Cursos/lista_curso.html',locals())
+            except:
+                return render(request,'Cursos/seleccionar_cursos.html',locals())
+        return render(request,'Cursos/seleccionar_cursos.html',locals())
+    else:
+        return render(request,'Cursos/lista_curso.html',locals())

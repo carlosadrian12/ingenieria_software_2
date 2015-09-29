@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from url_usuarios import *
+from url_curso import *
 
 from apps.usuarios.views import *
 
@@ -24,4 +25,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^inicio/', inicio),
 ]
-urlpatterns += url_usuarios
+
+urlpatterns += url_usuarios + url_curso

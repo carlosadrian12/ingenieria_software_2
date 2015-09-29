@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Seleccionar- Cursos
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="medium-6 medium-centered columns panel {{ form_classes }}">
+        <h4 class="text-center">Lista de Cursos</h4>
+            <form >
+                <select name="materia" onchange="redirigeUrl(this)">
+                {% for materia in cursos %}
+                        <option value ='{{materia.nombre}}'>{{materia.nombre}} ({{materia.nick}})</option>
+                {% endfor %}
+                </select>
+                <input type="submit" class="button expand">
+            </form>
+    </div>
+</div>
+{% endblock %}
